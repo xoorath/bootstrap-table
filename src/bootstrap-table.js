@@ -2538,6 +2538,7 @@
 
         $.each(allParams, function(i, params) {
             if (!params.hasOwnProperty('index') || !params.hasOwnProperty('row')) {
+                console.warn('row not found: ' + params.index + ', ' + params.index);
                 return;
             }
             $.extend(that.options.data[params.index], params.row);
