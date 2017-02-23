@@ -78,20 +78,41 @@
                 });
 
                 var _dont_edit_formatter = false;
+                var _prefix_text = '';
+                var _postfix_text = '';
+
+                if(column.editable.hasOwnProperty('prefixFormatter')) {
+                    var _prefix_formatter = column.editable.prefixFormatter;
+                    if(typeof column.editable.prefixFormatter == 'function') {
+                        _prefix_text = column.editable.prefixFormatter.call(this, result, column, row);
+                    } else {
+                        _prefix_text = column.editable.prefixFormatter;
+                    }
+                }
+                if(column.editable.hasOwnProperty('postfixFormatter')) {
+                    var _prefix_formatter = column.editable.postfixFormatter;
+                    if(typeof column.editable.postfixFormatter == 'function') {
+                        _postfix_text = column.editable.postfixFormatter.call(this, result, column, row);
+                    } else {
+                        _postfix_text = column.editable.postfixFormatter;
+                    }
+                }
+
                 if (column.editable.hasOwnProperty('noeditFormatter')) {
                     _dont_edit_formatter = column.editable.noeditFormatter(value, row, index);
                 }
 
                 if (_dont_edit_formatter === false) {
-                    return ['<a href="javascript:void(0)"',
+                    return [_prefix_text, '<a href="javascript:void(0)"',
                         ' data-name="' + column.field + '"',
                         ' data-pk="' + row[that.options.idField] + '"',
                         ' data-value="' + result + '"',
                         editableDataMarkup.join(''),
-                        '>' + '</a>'
+                        '>' + '</a>',
+                        _postfix_text
                     ].join('');
                 } else {
-                    return _dont_edit_formatter;
+                    return _prefix_text + _dont_edit_formatter + _postfix_text;
                 }
 
             };
